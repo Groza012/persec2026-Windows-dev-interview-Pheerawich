@@ -12,9 +12,9 @@ namespace PersecInterview.Tests
             Assert.True(q.IsValid("()"));
             Assert.False(q.IsValid("([{)"));
             Assert.True(q.IsValid("([{}])"));
-            Assert.False(q.IsValid("([{}]])"));
+            Assert.False(q.IsValid("([[{}]]]")); 
             Assert.False(q.IsValid(")"));
-            Assert.False(q.IsValid("(]}[)"));
+            Assert.False(q.IsValid("(]}])"));
             Assert.False(q.IsValid("([)]"));
             Assert.False(q.IsValid("{"));
         }
@@ -32,8 +32,11 @@ namespace PersecInterview.Tests
         {
             var q = new Q3_Autocomplete();
             var result = q.Autocomplete("th", new[] { "Mother", "Think", "Worthy", "Apple", "Android" }, 2);
-            // ต้องได้ Think, Mother ตามลำดับความสำคัญ โดยตัด Worthy ออกเพราะ maxResult = 2
             Assert.Equal(new[] { "Think", "Mother" }, result);
+
+            
+            var result2 = q.Autocomplete("th", new[] { "Worthy", "Mother" }, 2);
+            Assert.Equal(new[] { "Worthy", "Mother" }, result2);
         }
 
         [Fact]
@@ -67,14 +70,15 @@ namespace PersecInterview.Tests
         public void Q6_Test_Tribonacci()
         {
             var q = new Q6_Tribonacci();
+          
             Assert.Equal(new[] { 1, 3, 5, 9, 17 }, q.GetTribonacci(new[] { 1, 3, 5 }, 5));
             Assert.Equal(new[] { 2, 2, 2 }, q.GetTribonacci(new[] { 2, 2, 2 }, 3));
             Assert.Equal(new[] { 10, 10, 10, 30 }, q.GetTribonacci(new[] { 10, 10, 10 }, 4));
 
-            // Edge cases
             Assert.Empty(q.GetTribonacci(new[] { 5, 2, 0 }, 0));
             Assert.Equal(new[] { 1 }, q.GetTribonacci(new[] { 1 }, 1));
             Assert.Equal(new[] { 3, 4, 1, 8 }, q.GetTribonacci(new[] { 3, 4, 1 }, 4));
+            Assert.Equal(new[] { 0, 0, 0 }, q.GetTribonacci(new int[0], 3)); // signature ว่าง
         }
     }
 }
